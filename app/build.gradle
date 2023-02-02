@@ -1,18 +1,22 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
-    compileSdk 32
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+
+    compileSdk globalConfiguration["androidCompileSdkVersion"]
 
     defaultConfig {
         applicationId "com.melitopolcherry.timester"
-        minSdk 21
-        targetSdk 32
+        minSdk globalConfiguration["androidMinSdkVersion"]
+        targetSdk globalConfiguration["androidTargetSdkVersion"]
         versionCode 1
-        versionName "1.0"
-
+        versionName "0.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -21,7 +25,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        android.applicationVariants.all { variant ->
+            variant.outputs.all {
+                outputFileName = "topii_${variant.name}-${variant.versionName}-(${variant.versionCode}).apk"
+            }
+        }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -29,15 +39,28 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
+    def notations = rootProject.ext.coreDependencies
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.6.0'
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    for (item in notations.forImplementation) {
+        implementation item
+    }
+
+    for (item in notations.forKapt) {
+        kapt item
+    }
+
+    for (item in notations.forTest) {
+        testImplementation item
+    }
+
+    for (item in notations.forAndroidTest) {
+        androidTestImplementation item
+    }
 }
