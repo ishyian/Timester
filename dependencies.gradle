@@ -32,6 +32,8 @@ ext {
     mockitoInlineVersion = '2.8.47'
     espressoVersion = '3.4.0'
     roomVersion = '2.4.3'
+    calendarViewVersion = "1.6.1"
+    threeTenBpVersion = '1.4.4'
 
     coreKtx = "androidx.core:core-ktx:$coreKtxVersion"
     appCompat = "androidx.appcompat:appcompat:$appCompatVersion"
@@ -50,6 +52,7 @@ ext {
 
     roomCompiler = "androidx.room:room-compiler:$roomVersion"
     room = "androidx.room:room-runtime:$roomVersion"
+    roomKtx = "androidx.room:room-ktx:$roomVersion"
 
     navigationFragment = "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     navigationKtx = "androidx.navigation:navigation-ui-ktx:$navigationVersion"
@@ -66,12 +69,14 @@ ext {
     materialDatePicker = "com.wdullaer:materialdatetimepicker:$materialDatePickerVersion"
     cicerone = "com.github.terrakok:cicerone:$ciceroneVersion"
 
+    calendarView = "com.github.tizisdeepan:eventscalendar:$calendarViewVersion"
+
     contactsCore = "com.github.vestrel00.contacts-android:core:$contactsVersion"
     contactsAsync = "com.github.vestrel00.contacts-android:async:$contactsVersion"
     contactsPermission = "com.github.vestrel00.contacts-android:permissions:$contactsVersion"
 
     timber = "com.jakewharton.timber:timber:$timberVersion"
-    javaTime = "org.threeten:threetenbp:$threeTenVersion"
+    javaTime = "com.jakewharton.threetenabp:threetenabp:$threeTenBpVersion"
     glide = "com.github.bumptech.glide:glide:$glideVersion"
     glideCompiler = "com.github.bumptech.glide:compiler:$glideVersion"
 
@@ -111,7 +116,8 @@ ext {
                     timber,
                     javaTime,
                     glide,
-                    room
+                    room,
+                    roomKtx
             ],
 
             forKapt          : [
