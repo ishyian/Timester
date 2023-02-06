@@ -27,3 +27,17 @@ fun Fragment.showSelectorDialog(
 ) {
     requireContext().showSelectorDialog(title, items, listener)
 }
+
+fun Context.showMultiChoiceDialog(
+    title: String,
+    items: Map<String, Boolean>,
+    listener: (DialogInterface, Int, Boolean) -> Unit
+) {
+    val dialog = AlertDialog.Builder(this)
+    dialog.setTitle(title)
+    dialog.setMultiChoiceItems(items.keys.toTypedArray(), items.values.toBooleanArray(), listener)
+    dialog.setPositiveButton(getString(com.simplemobiletools.commons.R.string.ok)) { dialogInterface: DialogInterface, _: Int ->
+        dialogInterface.dismiss()
+    }
+    dialog.show()
+}

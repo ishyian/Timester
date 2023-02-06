@@ -5,11 +5,14 @@ import com.melitopolcherry.timester.core.adapter.BaseDiffCallback
 import com.melitopolcherry.timester.presentation.calendar.model.EventUiModel
 
 class EventsAdapter(
-    onEventClick: (EventUiModel) -> Unit
+    onEventClick: (EventUiModel) -> Unit,
+    onFiltersClick: () -> Unit
 ) : AsyncListDifferDelegationAdapter<Any>(DiffCallback) {
 
     init {
         delegatesManager
+            .addDelegate(eventNoEventsAD())
+            .addDelegate(eventHeaderAD(onFiltersClick))
             .addDelegate(eventItemAD(onEventClick))
     }
 

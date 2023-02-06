@@ -11,5 +11,9 @@ enum class EventType(val value: String, val typeName: String) {
         fun typeOf(value: String): EventType {
             return values().firstOrNull { it.value == value } ?: REGULAR
         }
+
+        fun withName(name: String): String {
+            return values().firstOrNull { it.name == name }?.value ?: REGULAR.value
+        }
     }
 }
