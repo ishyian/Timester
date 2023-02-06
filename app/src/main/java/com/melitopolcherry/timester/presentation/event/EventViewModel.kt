@@ -153,6 +153,10 @@ class EventViewModel @AssistedInject constructor(
         this.title = title
     }
 
+    fun onEventTypeChanged(eventType: String) {
+        this.eventType = eventType
+    }
+
     @dagger.assisted.AssistedFactory
     interface AssistedFactory {
         fun create(@Assisted parameters: EventParameters): EventViewModel

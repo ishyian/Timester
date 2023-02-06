@@ -2,6 +2,7 @@ package com.melitopolcherry.timester.presentation.event
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.melitopolcherry.timester.R
 import com.melitopolcherry.timester.core.delegates.parcelableParameters
+import com.melitopolcherry.timester.core.extensions.showSelectorDialog
 import com.melitopolcherry.timester.core.extensions.toDateString
 import com.melitopolcherry.timester.core.extensions.toTimeString
 import com.melitopolcherry.timester.core.extensions.viewModelCreator
@@ -51,7 +53,15 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
-        setupClickListener(imageDelete, imageSave, eventStartDate, eventStartTime, eventEndTime, toolbar.btnBack)
+        setupClickListener(
+            imageDelete,
+            imageSave,
+            eventStartDate,
+            eventStartTime,
+            eventEndTime,
+            toolbar.btnBack,
+            eventTypeHolder
+        )
 
         imageDelete.isVisible = parameters.isEditMode
 
@@ -79,7 +89,20 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
             R.id.event_start_date -> {
                 onStartDateClicked()
             }
+            R.id.event_type_holder -> {
+                onEventTypeClick()
+            }
             else -> viewModel.onClick(v)
+        }
+    }
+
+    private fun onEventTypeClick() {
+        showSelectorDialog(getString(R.string.select_event_type_title),
+                           EventType.values().map { it.typeName }) { dialogInterface: DialogInterface, i: Int ->
+            val eventType = EventType.values()[i]
+            binding.eventType.text = eventType.typeName
+            viewModel.onEventTypeChanged(eventType.value)
+            dialogInterface.dismiss()
         }
     }
 
