@@ -30,6 +30,9 @@ class Event {
     @ColumnInfo(name = "event_type")
     var eventType: String = EventType.REGULAR.value
 
+    @ColumnInfo(name = "isAllDay")
+    var isAllDay: Boolean = false
+
     val eventStartTime: String?
         get() = startDate?.format(DateTimeFormatter.ofPattern("HH:mm"))
 

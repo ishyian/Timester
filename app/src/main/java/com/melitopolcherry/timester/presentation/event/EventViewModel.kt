@@ -35,6 +35,7 @@ class EventViewModel @AssistedInject constructor(
     private var endDate: LocalDateTime = startDate.plusHours(1)
     private var title: String = ""
     private var description: String = ""
+    private var isAllDay: Boolean = false
     private var eventType: String = EventType.REGULAR.value
 
     private var newEvent = Event()
@@ -90,6 +91,7 @@ class EventViewModel @AssistedInject constructor(
             newEvent.title = title
             newEvent.description = description
             newEvent.eventType = eventType
+            newEvent.isAllDay = isAllDay
             viewModelScope.launch {
                 val id = eventsRepository.createEvent(newEvent)
                 Timber.d("Event id $id")
@@ -105,6 +107,7 @@ class EventViewModel @AssistedInject constructor(
             newEvent.title = title
             newEvent.description = description
             newEvent.eventType = eventType
+            newEvent.isAllDay = isAllDay
             viewModelScope.launch {
                 val id = eventsRepository.createEvent(newEvent)
                 Timber.d("Event id $id")
@@ -155,6 +158,32 @@ class EventViewModel @AssistedInject constructor(
 
     fun onEventTypeChanged(eventType: String) {
         this.eventType = eventType
+    }
+
+    fun onAllDayChanged(isAllDay: Boolean) {
+        this.isAllDay = isAllDay
+        if (isAllDay) {
+            startDate = LocalDateTime.of(
+                startDate.year,
+                startDate.month,
+                startDate.dayOfMonth,
+                0,
+                0
+            )
+
+            _eventStartDate.postValue(startDate)
+
+            endDate = LocalDateTime.of(
+                endDate.year,
+                endDate.month,
+                endDate.dayOfMonth,
+                23,
+                59
+            )
+
+            _eventEndDate.postValue(endDate)
+
+        }
     }
 
     @dagger.assisted.AssistedFactory

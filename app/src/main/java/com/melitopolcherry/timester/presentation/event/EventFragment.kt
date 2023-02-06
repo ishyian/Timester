@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.melitopolcherry.timester.R
@@ -71,6 +72,12 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
 
         eventTitle.doAfterTextChanged { text ->
             viewModel.onTitleChanged(text.toString())
+        }
+
+        eventAllDay.setOnCheckedChangeListener { buttonView, isChecked ->
+            eventEndTime.isInvisible = isChecked
+            eventStartTime.isInvisible = isChecked
+            viewModel.onAllDayChanged(isChecked)
         }
 
         initObservers()
@@ -147,6 +154,9 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         eventStartTime.text = event.eventStartTime
         eventStartDate.text = event.eventStartDate
         eventEndTime.text = event.eventEndTime
+        eventEndTime.isInvisible = event.isAllDay
+        eventStartTime.isInvisible = event.isAllDay
+        eventAllDay.isChecked = event.isAllDay
         eventType.text = EventType.typeOf(event.eventType).typeName
     }
 

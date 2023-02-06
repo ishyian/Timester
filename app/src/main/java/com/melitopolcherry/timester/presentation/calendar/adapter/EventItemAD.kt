@@ -2,6 +2,7 @@ package com.melitopolcherry.timester.presentation.calendar.adapter
 
 import android.annotation.SuppressLint
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
+import com.melitopolcherry.timester.R
 import com.melitopolcherry.timester.databinding.EventItemBinding
 import com.melitopolcherry.timester.presentation.calendar.model.EventUiModel
 import org.threeten.bp.format.DateTimeFormatter
@@ -21,7 +22,12 @@ fun eventItemAD(
         with(binding) {
             eventItemTitle.text = item.event.title
             eventItemDescription.text = item.event.description
-            eventItemTime.text = item.event.startDate?.format(DateTimeFormatter.ofPattern("HH:mm"))
+            eventItemTime.text = if (item.event.isAllDay) {
+                getString(R.string.all_day)
+            } else {
+                item.event.startDate?.format(DateTimeFormatter.ofPattern("HH:mm"))
+            }
+
         }
     }
 }
