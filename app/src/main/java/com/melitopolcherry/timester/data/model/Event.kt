@@ -5,16 +5,17 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 
 @Entity(tableName = "events")
 class Event {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
-    @ColumnInfo(name = "start_ts")
+    @ColumnInfo(name = "start_date")
     var startDate: LocalDateTime? = null
 
-    @ColumnInfo(name = "end_ts")
+    @ColumnInfo(name = "end_date")
     var endDate: LocalDateTime? = null
 
     @ColumnInfo(name = "title")
@@ -28,6 +29,15 @@ class Event {
 
     @ColumnInfo(name = "event_type")
     var eventType: String = EventType.UNKNOWN.value
+
+    val eventStartTime: String?
+        get() = startDate?.format(DateTimeFormatter.ofPattern("HH:mm"))
+
+    val eventEndTime: String?
+        get() = endDate?.format(DateTimeFormatter.ofPattern("HH:mm"))
+
+    val eventStartDate: String?
+        get() = startDate?.format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
 
     @Ignore
     constructor()
@@ -68,3 +78,4 @@ class Event {
     }
 
 }
+

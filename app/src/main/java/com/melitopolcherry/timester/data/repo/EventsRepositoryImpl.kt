@@ -17,7 +17,15 @@ class EventsRepositoryImpl(
         }
     }
 
-    override suspend fun createEvent(event: Event) {
+    override suspend fun createEvent(event: Event): Long {
+        return withContext(appDispatchers.storage) {
+            database.eventsDao().insertEvent(event)
+        }
+    }
 
+    override suspend fun getEventById(id: Long?): Event {
+        return withContext(appDispatchers.storage) {
+            database.eventsDao().getEventById(id)
+        }
     }
 }

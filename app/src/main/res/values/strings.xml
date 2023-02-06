@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Timester</string>
+    <string name="description">Description</string>
+    <string name="all_day">All day</string>
 </resources>

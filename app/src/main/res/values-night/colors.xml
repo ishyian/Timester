@@ -4,4 +4,5 @@
     <color name="window_background">@color/black</color>
     <color name="textColorSecondary">#666666</color>
     <color name="calendarPrimaryColor">@color/white</color>
+    <color name="iconColor">@color/white</color>
 </resources>

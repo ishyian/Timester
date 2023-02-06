@@ -11,4 +11,5 @@
     <color name="window_background">#FAFAFA</color>
     <color name="textColorSecondary">#666666</color>
     <color name="calendarPrimaryColor">@color/colorTextPrimary</color>
+    <color name="iconColor">@color/black</color>
 </resources>
