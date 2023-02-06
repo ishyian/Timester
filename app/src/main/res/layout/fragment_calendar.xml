@@ -34,8 +34,10 @@
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
                 android:id="@+id/calendarView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:mcv_dateTextAppearance="@style/CalendarViewTextAppearance"
+                app:mcv_leftArrow="@drawable/ic_arrow_back"
+                app:mcv_rightArrow="@drawable/ic_arrow_right"
                 app:mcv_showOtherDates="all" />
 
             <androidx.recyclerview.widget.RecyclerView

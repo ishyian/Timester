@@ -7,8 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import com.melitopolcherry.timester.R
 import com.melitopolcherry.timester.core.delegates.parcelableParameters
+import com.melitopolcherry.timester.core.extensions.toDateString
+import com.melitopolcherry.timester.core.extensions.toTimeString
 import com.melitopolcherry.timester.core.extensions.viewModelCreator
 import com.melitopolcherry.timester.core.presentation.BaseFragment
 import com.melitopolcherry.timester.data.model.Event
@@ -48,7 +51,17 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         setupClickListener(imageDelete, imageSave, eventStartDate, eventStartTime, eventEndTime)
+
         imageDelete.isVisible = parameters.isEditMode
+
+        eventDescription.doAfterTextChanged { text ->
+            viewModel.onDescriptionChanged(text.toString())
+        }
+
+        eventTitle.doAfterTextChanged { text ->
+            viewModel.onTitleChanged(text.toString())
+        }
+
         initObservers()
     }
 
@@ -112,7 +125,18 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         eventEndTime.text = event.eventEndTime
     }
 
+    private fun onStartDateChanged(startDate: LocalDateTime) = with(binding) {
+        eventStartTime.text = startDate.toTimeString()
+        eventStartDate.text = startDate.toDateString()
+    }
+
+    private fun onEndDateChanged(endDate: LocalDateTime) = with(binding) {
+        eventEndTime.text = endDate.toTimeString()
+    }
+
     private fun initObservers() = with(viewModel) {
         observe(event, ::onEventLoaded)
+        observe(eventEndDate, ::onEndDateChanged)
+        observe(eventStartDate, ::onStartDateChanged)
     }
 }

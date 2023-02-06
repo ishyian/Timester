@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.melitopolcherry.timester.R
 import com.melitopolcherry.timester.data.model.Event
+import com.melitopolcherry.timester.data.model.EventType
 import com.melitopolcherry.timester.domain.repo.EventsRepository
 import com.topiichat.core.presentation.platform.BaseViewModel
 import dagger.assisted.Assisted
@@ -24,26 +25,35 @@ class EventViewModel @AssistedInject constructor(
     private val _event: MutableLiveData<Event> = MutableLiveData()
     val event: LiveData<Event> = _event
 
-    var startDate: LocalDateTime? = null
-    var endDate: LocalDateTime? = null
+    private val _eventStartDate: MutableLiveData<LocalDateTime> = MutableLiveData()
+    val eventStartDate: LiveData<LocalDateTime> = _eventStartDate
 
-    var newEvent = Event()
+    private val _eventEndDate: MutableLiveData<LocalDateTime> = MutableLiveData()
+    val eventEndDate: LiveData<LocalDateTime> = _eventEndDate
+
+    private var startDate: LocalDateTime = LocalDateTime.now()
+    private var endDate: LocalDateTime = startDate.plusHours(1)
+    private var title: String = ""
+    private var description: String = ""
+    private var eventType: String = EventType.UNKNOWN.value
+
+    private var newEvent = Event()
 
     init {
         Timber.d(parameters.isEditMode.toString())
         if (parameters.isEditMode) {
             viewModelScope.launch {
                 val event = eventsRepository.getEventById(parameters.eventId)
-                newEvent = event
-                startDate = event.startDate
-                endDate = event.endDate
-                Timber.d(event.toString())
+
+                event.startDate?.let { startDate = it }
+                event.endDate?.let { endDate = it }
+                description = event.description
+                eventType = event.eventType
+                title = event.title
+
                 _event.postValue(event)
             }
         } else {
-            startDate = LocalDateTime.now()
-            endDate = startDate?.plusHours(1)
-
             newEvent.startDate = startDate
             newEvent.endDate = endDate
 
@@ -64,8 +74,12 @@ class EventViewModel @AssistedInject constructor(
 
     private fun onBtnSaveClick() {
         if (parameters.isEditMode) {
+            newEvent.id = event.value?.id ?: 0
             newEvent.startDate = startDate
             newEvent.endDate = endDate
+            newEvent.title = title
+            newEvent.description = description
+            newEvent.eventType = eventType
             viewModelScope.launch {
                 val id = eventsRepository.createEvent(newEvent)
                 Timber.d("Event id $id")
@@ -74,8 +88,9 @@ class EventViewModel @AssistedInject constructor(
         } else {
             newEvent.startDate = startDate
             newEvent.endDate = endDate
-            newEvent.title = "Event"
-            newEvent.description = "Description"
+            newEvent.title = title
+            newEvent.description = description
+            newEvent.eventType = eventType
             viewModelScope.launch {
                 val id = eventsRepository.createEvent(newEvent)
                 Timber.d("Event id $id")
@@ -84,58 +99,44 @@ class EventViewModel @AssistedInject constructor(
         }
     }
 
-    fun addEvent() {
-        viewModelScope.launch {
-            /*val event = Event(
-                startDate = LocalDateTime.ofInstant(
-                    DateTimeUtils.toInstant(calendar),
-                    ZoneId.systemDefault()
-                ),
-                endDate = LocalDateTime.ofInstant(
-                    DateTimeUtils.toInstant(calendar),
-                    ZoneId.systemDefault()
-                ),
-                title = "Event title retr",
-                description = "Event description",
-                timeZone = ZoneId.systemDefault().id,
-                eventType = EventType.HOLIDAY.value
-            )
-            val id = database.eventsDao().insertEvent(event)
-            Timber.d("Events add $id $event")
-            binding.calendarView.addDecorator(
-                EventDecorator(
-                    Color.RED,
-                    listOf(CalendarDay.from(event.startDate?.toLocalDate()))
-                )
-            )*/
-            //calendar.add(Calendar.DAY_OF_MONTH, 4)
-        }
-    }
-
     fun onStartDateChanged(year: Int, month: Int, dayOfMonth: Int) {
-        startDate = LocalDateTime.of(year, month + 1, dayOfMonth, startDate?.hour ?: 0, startDate?.minute ?: 0)
-        endDate = LocalDateTime.of(year, month + 1, dayOfMonth, endDate?.hour ?: 0, endDate?.minute ?: 0)
+        startDate = LocalDateTime.of(year, month + 1, dayOfMonth, startDate.hour, startDate.minute)
+        endDate = LocalDateTime.of(year, month + 1, dayOfMonth, endDate.hour, endDate.minute)
+
+        _eventStartDate.postValue(startDate)
 
     }
 
     fun onStartTimeChanged(hourOfDay: Int, minute: Int) {
         startDate = LocalDateTime.of(
-            requireNotNull(startDate?.year),
-            requireNotNull(startDate?.month),
-            requireNotNull(startDate?.dayOfMonth),
+            startDate.year,
+            startDate.month,
+            startDate.dayOfMonth,
             hourOfDay,
             minute
         )
+
+        _eventStartDate.postValue(startDate)
     }
 
     fun onEndTimeChanged(hourOfDay: Int, minute: Int) {
         endDate = LocalDateTime.of(
-            requireNotNull(endDate?.year),
-            requireNotNull(endDate?.month),
-            requireNotNull(endDate?.dayOfMonth),
+            endDate.year,
+            endDate.month,
+            endDate.dayOfMonth,
             hourOfDay,
             minute
         )
+
+        _eventEndDate.postValue(endDate)
+    }
+
+    fun onDescriptionChanged(description: String) {
+        this.description = description
+    }
+
+    fun onTitleChanged(title: String) {
+        this.title = title
     }
 
     @dagger.assisted.AssistedFactory
