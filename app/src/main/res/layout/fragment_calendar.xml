@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/window_background">
@@ -15,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:toolbarTitle="Calendar" />
+        app:toolbarTitle="@string/app_name" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0px"
@@ -36,6 +37,14 @@
                 android:layout_height="match_parent"
                 app:mcv_dateTextAppearance="@style/CalendarViewTextAppearance"
                 app:mcv_showOtherDates="all" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_events"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/event_item" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

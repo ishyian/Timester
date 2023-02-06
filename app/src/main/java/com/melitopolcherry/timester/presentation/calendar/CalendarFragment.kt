@@ -8,13 +8,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.melitopolcherry.timester.R
+import com.melitopolcherry.timester.core.extensions.lazyUnsynchronized
 import com.melitopolcherry.timester.core.presentation.BaseFragment
 import com.melitopolcherry.timester.core.presentation.EventDecorator
 import com.melitopolcherry.timester.data.database.AppDatabase
 import com.melitopolcherry.timester.data.model.Event
 import com.melitopolcherry.timester.data.model.EventType
 import com.melitopolcherry.timester.databinding.FragmentCalendarBinding
+import com.melitopolcherry.timester.presentation.calendar.adapter.EventsAdapter
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.threeten.bp.DateTimeUtils
@@ -25,7 +29,8 @@ import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CalendarFragment : BaseFragment<FragmentCalendarBinding>(), ICalendarFragment, View.OnClickListener {
+class CalendarFragment : BaseFragment<FragmentCalendarBinding>(), ICalendarFragment, OnDateSelectedListener,
+    View.OnClickListener {
 
     private val viewModel: CalendarViewModel by viewModels()
 
@@ -34,18 +39,18 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(), ICalendarFragm
     @Inject
     lateinit var database: AppDatabase
 
+    private val eventsAdapter by lazyUnsynchronized {
+        EventsAdapter(onEventClick = viewModel::onEventClick)
+    }
+
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentCalendarBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         setupClickListener(btnAddEvent)
-        observe(viewModel.events) {
-            calendarView.addDecorator(
-                EventDecorator(
-                    Color.RED,
-                    it.map { CalendarDay.from(it.startDate?.toLocalDate()) })
-            )
-        }
+        rvEvents.adapter = eventsAdapter
+        calendarView.setOnDateChangedListener(this@CalendarFragment)
+        initObservers()
     }
 
     override fun onClick(v: View?) {
@@ -84,5 +89,22 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(), ICalendarFragm
         }
     }
 
+    override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
+        viewModel.onDaySelected(date)
+    }
+
     override fun onVisibilityLoader(isVisibleLoader: Boolean) = Unit
+
+    private fun initObservers() = with(viewModel) {
+        observe(events) {
+            binding.calendarView.addDecorator(
+                EventDecorator(
+                    Color.RED,
+                    it.map { CalendarDay.from(it.startDate?.toLocalDate()) })
+            )
+        }
+        observe(eventsList) {
+            eventsAdapter.items = it
+        }
+    }
 }
