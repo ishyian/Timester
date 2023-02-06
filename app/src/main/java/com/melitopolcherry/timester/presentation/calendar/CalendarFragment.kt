@@ -45,7 +45,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(), ICalendarFragm
     override fun onResume() = with(binding) {
         super.onResume()
         calendarView.removeDecorators()
-        viewModel.loadEvents(calendarView.selectedDate)
+        viewModel.loadEvents()
     }
 
     override fun onClick(v: View?) {

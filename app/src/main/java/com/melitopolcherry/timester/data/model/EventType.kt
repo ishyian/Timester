@@ -1,13 +1,15 @@
 package com.melitopolcherry.timester.data.model
 
-enum class EventType(val value: String) {
-    MEETING("meeting"),
-    ACTIVITY("activity"),
-    REST("rest"),
-    HOLIDAY("holiday"),
-    UNKNOWN("unknown");
+enum class EventType(val value: String, val typeName: String) {
+    REGULAR("regular", "Regular event"),
+    MEETING("meeting", "Meeting"),
+    ACTIVITY("activity", "Activity"),
+    REST("rest", "Rest"),
+    HOLIDAY("holiday", "Holiday");
 
-    fun typeOf(value: String): EventType {
-        return values().firstOrNull { it.value == value } ?: UNKNOWN
+    companion object {
+        fun typeOf(value: String): EventType {
+            return values().firstOrNull { it.value == value } ?: REGULAR
+        }
     }
 }

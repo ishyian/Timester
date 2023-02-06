@@ -15,6 +15,7 @@ import com.melitopolcherry.timester.core.extensions.toTimeString
 import com.melitopolcherry.timester.core.extensions.viewModelCreator
 import com.melitopolcherry.timester.core.presentation.BaseFragment
 import com.melitopolcherry.timester.data.model.Event
+import com.melitopolcherry.timester.data.model.EventType
 import com.melitopolcherry.timester.databinding.FragmentEventBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.LocalDateTime
@@ -33,15 +34,15 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
 
     private val parameters by parcelableParameters<EventParameters>()
 
-    private val startDateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+    private val startDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
         viewModel.onStartDateChanged(year, month, dayOfMonth)
     }
 
-    private val startTimeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+    private val startTimeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
         viewModel.onStartTimeChanged(hourOfDay, minute)
     }
 
-    private val endTimeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+    private val endTimeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
         viewModel.onEndTimeChanged(hourOfDay, minute)
     }
 
@@ -50,7 +51,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
-        setupClickListener(imageDelete, imageSave, eventStartDate, eventStartTime, eventEndTime)
+        setupClickListener(imageDelete, imageSave, eventStartDate, eventStartTime, eventEndTime, toolbar.btnBack)
 
         imageDelete.isVisible = parameters.isEditMode
 
@@ -123,6 +124,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         eventStartTime.text = event.eventStartTime
         eventStartDate.text = event.eventStartDate
         eventEndTime.text = event.eventEndTime
+        eventType.text = EventType.typeOf(event.eventType).typeName
     }
 
     private fun onStartDateChanged(startDate: LocalDateTime) = with(binding) {
@@ -138,5 +140,6 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         observe(event, ::onEventLoaded)
         observe(eventEndDate, ::onEndDateChanged)
         observe(eventStartDate, ::onStartDateChanged)
+        observe(showMsgError, ::showErrorMessage)
     }
 }

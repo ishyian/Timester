@@ -35,7 +35,7 @@ class EventViewModel @AssistedInject constructor(
     private var endDate: LocalDateTime = startDate.plusHours(1)
     private var title: String = ""
     private var description: String = ""
-    private var eventType: String = EventType.UNKNOWN.value
+    private var eventType: String = EventType.REGULAR.value
 
     private var newEvent = Event()
 
@@ -96,6 +96,10 @@ class EventViewModel @AssistedInject constructor(
                 onClickBack()
             }
         } else {
+            if (title.isEmpty() || description.isEmpty()) {
+                _showMsgError.postValue("Please fill title and description")
+                return
+            }
             newEvent.startDate = startDate
             newEvent.endDate = endDate
             newEvent.title = title

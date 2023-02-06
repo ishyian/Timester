@@ -28,7 +28,7 @@ class Event {
     var timeZone: String = ""
 
     @ColumnInfo(name = "event_type")
-    var eventType: String = EventType.UNKNOWN.value
+    var eventType: String = EventType.REGULAR.value
 
     val eventStartTime: String?
         get() = startDate?.format(DateTimeFormatter.ofPattern("HH:mm"))
