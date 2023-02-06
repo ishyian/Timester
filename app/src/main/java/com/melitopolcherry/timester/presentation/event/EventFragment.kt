@@ -1,25 +1,36 @@
 package com.melitopolcherry.timester.presentation.event
 
+import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.ActivityNotFoundException
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.melitopolcherry.timester.R
+import com.melitopolcherry.timester.core.contract.PickFileActivityContract
 import com.melitopolcherry.timester.core.delegates.parcelableParameters
+import com.melitopolcherry.timester.core.extensions.lazyUnsynchronized
 import com.melitopolcherry.timester.core.extensions.showSelectorDialog
 import com.melitopolcherry.timester.core.extensions.toDateString
 import com.melitopolcherry.timester.core.extensions.toTimeString
 import com.melitopolcherry.timester.core.extensions.viewModelCreator
+import com.melitopolcherry.timester.core.permissions.AndroidPermissionsManager
 import com.melitopolcherry.timester.core.presentation.BaseFragment
+import com.melitopolcherry.timester.data.model.Attachment
 import com.melitopolcherry.timester.data.model.Event
 import com.melitopolcherry.timester.data.model.EventType
 import com.melitopolcherry.timester.databinding.FragmentEventBinding
+import com.melitopolcherry.timester.presentation.event.adapter.AttachmentsAdapter
+import com.melitopolcherry.timester.presentation.event.model.AddAttachmentUiModel
+import com.melitopolcherry.timester.presentation.event.model.AttachmentUiModel
 import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.LocalDateTime
 import java.util.Calendar
@@ -37,6 +48,22 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
 
     private val parameters by parcelableParameters<EventParameters>()
 
+    private val attachmentsAdapter by lazyUnsynchronized {
+        AttachmentsAdapter(
+            onAddClick = ::onAddClick,
+            onAttachmentsClick = ::onAttachmentClick
+        )
+    }
+
+    private val pickFile = registerForActivityResult(PickFileActivityContract()) { uri ->
+        attachmentsAdapter.items = attachmentsAdapter
+            .items
+            .plus(AttachmentUiModel(Attachment(uri.toString())))
+        viewModel.addAttachment(uri)
+    }
+
+    private var permissionManager: AndroidPermissionsManager? = null
+
     private val startDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
         viewModel.onStartDateChanged(year, month, dayOfMonth)
     }
@@ -52,6 +79,11 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
     override fun initBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentEventBinding.inflate(
         inflater, container, false
     )
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        permissionManager = AndroidPermissionsManager(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         setupClickListener(
@@ -79,6 +111,8 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
             eventStartTime.isInvisible = isChecked
             viewModel.onAllDayChanged(isChecked)
         }
+
+        rvAttachments.adapter = attachmentsAdapter
 
         initObservers()
     }
@@ -169,10 +203,37 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         eventEndTime.text = endDate.toTimeString()
     }
 
+    private fun onAddClick() {
+        permissionManager?.requestPermissions(
+            permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+            granted = { pickFile.launch(Unit) },
+            denied = { showErrorMessage(getString(R.string.file_permission_denied)) },
+            rationale = { showErrorMessage(getString(R.string.file_permission_denied)) }
+        )
+    }
+
+    private fun onAttachmentClick(attachment: Attachment) {
+        val view = Intent(Intent.ACTION_VIEW)
+        view.data = attachment.uri.toUri()
+        view.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        try {
+            startActivity(view)
+        } catch (e: ActivityNotFoundException) {
+            showErrorMessage(getString(R.string.no_application_found_to_open_file))
+        } catch (e: SecurityException) {
+            showErrorMessage(getString(R.string.sharing_application_not_grant_permission))
+        }
+    }
+
+    private fun onAttachmentsLoad(list: List<Attachment>) {
+        attachmentsAdapter.items = listOf(AddAttachmentUiModel).plus(list.map { AttachmentUiModel(it) })
+    }
+
     private fun initObservers() = with(viewModel) {
         observe(event, ::onEventLoaded)
         observe(eventEndDate, ::onEndDateChanged)
         observe(eventStartDate, ::onStartDateChanged)
         observe(showMsgError, ::showErrorMessage)
+        observe(attachmentsList, ::onAttachmentsLoad)
     }
 }

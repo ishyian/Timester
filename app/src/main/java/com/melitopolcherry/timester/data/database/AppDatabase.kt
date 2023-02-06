@@ -12,7 +12,7 @@ import com.melitopolcherry.timester.data.model.Event
 @TypeConverters(
     LocalDateTypeConverter::class
 )
-@Database(entities = [Event::class], version = 5, exportSchema = false)
+@Database(entities = [Event::class], version = 7, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun eventsDao(): EventsDao

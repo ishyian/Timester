@@ -7,4 +7,7 @@
     <string name="select_event_type_to_filter">Select event type to filter events</string>
     <string name="select">Select</string>
     <string name="no_events">No events for this date. Please check filters or add new event by clicking on \'+\' button</string>
+    <string name="file_permission_denied">To add attachment you need to grant permission.</string>
+    <string name="no_application_found_to_open_file">No apps to open this file</string>
+    <string name="sharing_application_not_grant_permission">Permissions to view not granted</string>
 </resources>

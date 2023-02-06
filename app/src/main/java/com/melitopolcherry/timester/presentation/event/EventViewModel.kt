@@ -1,10 +1,14 @@
 package com.melitopolcherry.timester.presentation.event
 
+import android.net.Uri
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.melitopolcherry.timester.R
+import com.melitopolcherry.timester.data.model.Attachment
 import com.melitopolcherry.timester.data.model.Event
 import com.melitopolcherry.timester.data.model.EventType
 import com.melitopolcherry.timester.domain.repo.EventsRepository
@@ -25,6 +29,9 @@ class EventViewModel @AssistedInject constructor(
     private val _event: MutableLiveData<Event> = MutableLiveData()
     val event: LiveData<Event> = _event
 
+    private val _attachmentsList: MutableLiveData<List<Attachment>> = MutableLiveData()
+    val attachmentsList: LiveData<List<Attachment>> = _attachmentsList
+
     private val _eventStartDate: MutableLiveData<LocalDateTime> = MutableLiveData()
     val eventStartDate: LiveData<LocalDateTime> = _eventStartDate
 
@@ -40,25 +47,33 @@ class EventViewModel @AssistedInject constructor(
 
     private var newEvent = Event()
 
+    private var attachments = arrayListOf<Attachment>()
+
     init {
         Timber.d(parameters.isEditMode.toString())
         if (parameters.isEditMode) {
             viewModelScope.launch {
                 val event = eventsRepository.getEventById(parameters.eventId)
-
                 event.startDate?.let { startDate = it }
                 event.endDate?.let { endDate = it }
                 description = event.description
                 eventType = event.eventType
                 title = event.title
-
+                val token = object : TypeToken<ArrayList<Attachment>>() {}.type
+                Timber.d(event.attachments)
+                attachments = Gson().fromJson<ArrayList<Attachment>>(event.attachments, token) ?: ArrayList()
                 _event.postValue(event)
+                Timber.d(attachments.toString())
+                _attachmentsList.postValue(attachments)
             }
         } else {
             newEvent.startDate = startDate
             newEvent.endDate = endDate
 
             _event.postValue(newEvent)
+            val token = object : TypeToken<ArrayList<Attachment>>() {}.type
+            _attachmentsList.postValue(attachments)
+            Timber.d(attachmentsList.value?.toString())
         }
     }
 
@@ -92,9 +107,9 @@ class EventViewModel @AssistedInject constructor(
             newEvent.description = description
             newEvent.eventType = eventType
             newEvent.isAllDay = isAllDay
+            newEvent.attachments = Gson().toJson(attachments)
             viewModelScope.launch {
-                val id = eventsRepository.createEvent(newEvent)
-                Timber.d("Event id $id")
+                eventsRepository.createEvent(newEvent)
                 onClickBack()
             }
         } else {
@@ -108,6 +123,7 @@ class EventViewModel @AssistedInject constructor(
             newEvent.description = description
             newEvent.eventType = eventType
             newEvent.isAllDay = isAllDay
+            newEvent.attachments = Gson().toJson(attachments)
             viewModelScope.launch {
                 val id = eventsRepository.createEvent(newEvent)
                 Timber.d("Event id $id")
@@ -184,6 +200,10 @@ class EventViewModel @AssistedInject constructor(
             _eventEndDate.postValue(endDate)
 
         }
+    }
+
+    fun addAttachment(uri: Uri?) {
+        attachments.add(Attachment(uri.toString()))
     }
 
     @dagger.assisted.AssistedFactory

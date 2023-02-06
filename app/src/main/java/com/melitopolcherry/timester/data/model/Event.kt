@@ -33,6 +33,9 @@ class Event {
     @ColumnInfo(name = "isAllDay")
     var isAllDay: Boolean = false
 
+    @ColumnInfo(name = "attachments")
+    var attachments: String = ""
+
     val eventStartTime: String?
         get() = startDate?.format(DateTimeFormatter.ofPattern("HH:mm"))
 

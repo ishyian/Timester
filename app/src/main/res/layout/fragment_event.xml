@@ -22,10 +22,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/offset16"
-        app:layout_constraintTop_toTopOf="@id/toolbar"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/toolbar"
         app:layout_constraintEnd_toEndOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="@id/toolbar"
         app:srcCompat="@drawable/ic_delete" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -33,9 +33,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/offset16"
-        app:layout_constraintTop_toTopOf="@id/toolbar"
         app:layout_constraintBottom_toBottomOf="@id/toolbar"
         app:layout_constraintEnd_toStartOf="@id/image_delete"
+        app:layout_constraintTop_toTopOf="@id/toolbar"
         app:srcCompat="@drawable/ic_check" />
 
     <androidx.core.widget.NestedScrollView
@@ -228,6 +228,15 @@
                 android:background="@color/divider_grey"
                 android:importantForAccessibility="no" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_attachments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/event_type_divider"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/add_attachments_item" />
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 
