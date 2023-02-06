@@ -69,6 +69,16 @@ class EventViewModel @AssistedInject constructor(
             R.id.image_view_back -> {
                 onClickBack()
             }
+            R.id.image_delete -> {
+                onDeleteClick()
+            }
+        }
+    }
+
+    private fun onDeleteClick() {
+        viewModelScope.launch {
+            eventsRepository.deleteEvent(event.value?.id)
+            onClickBack()
         }
     }
 

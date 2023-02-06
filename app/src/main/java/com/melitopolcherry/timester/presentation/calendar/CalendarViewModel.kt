@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.melitopolcherry.timester.R
 import com.melitopolcherry.timester.core.extensions.isSameDay
+import com.melitopolcherry.timester.core.presentation.SingleLiveData
 import com.melitopolcherry.timester.data.model.Event
 import com.melitopolcherry.timester.domain.repo.EventsRepository
 import com.melitopolcherry.timester.presentation.Screens
@@ -24,16 +25,16 @@ class CalendarViewModel @Inject constructor(
     router: Router
 ) : BaseViewModel(router), ICalendarViewModel {
 
-    private val _events: MutableLiveData<List<Event>> = MutableLiveData()
-    val events: LiveData<List<Event>> = _events
+    val events: SingleLiveData<List<Event>> = SingleLiveData()
+    var needToRefreshEventsList = false
 
     private val _eventsList: MutableLiveData<List<EventUiModel>> = MutableLiveData()
     val eventsList: LiveData<List<EventUiModel>> = _eventsList
 
-    fun loadEvents() {
+    fun loadEvents(selectedDate: CalendarDay?) {
         viewModelScope.launch {
-            val events = eventsRepository.getEvents()
-            _events.postValue(events)
+            val eventsList = eventsRepository.getEvents()
+            events.postValue(eventsList)
         }
     }
 
@@ -51,8 +52,9 @@ class CalendarViewModel @Inject constructor(
 
     fun onDaySelected(calendarDay: CalendarDay) {
         val events =
-            _events.value?.filter { event -> calendarDay.date.isSameDay(event.startDate) }
+            events.value?.filter { event -> event.startDate?.isSameDay(calendarDay.date) == true }
                 ?.map { EventUiModel(it) }
         _eventsList.postValue(events)
+        needToRefreshEventsList = false
     }
 }

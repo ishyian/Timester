@@ -10,6 +10,12 @@ fun LocalDate.isSameDay(dateTime: LocalDateTime?): Boolean {
         this.dayOfMonth == dateTime.dayOfMonth
 }
 
+fun LocalDateTime.isSameDay(dateTime: LocalDate?): Boolean {
+    return this.year == dateTime?.year &&
+        this.month == dateTime.month &&
+        this.dayOfMonth == dateTime.dayOfMonth
+}
+
 fun LocalDate.isSameDay(date: LocalDate): Boolean {
     return this.year == date.year &&
         this.month == date.month &&

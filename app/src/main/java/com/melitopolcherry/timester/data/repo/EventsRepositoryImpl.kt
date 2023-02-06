@@ -28,4 +28,10 @@ class EventsRepositoryImpl(
             database.eventsDao().getEventById(id)
         }
     }
+
+    override suspend fun deleteEvent(id: Long?) {
+        return withContext(appDispatchers.storage) {
+            database.eventsDao().deleteEvent(id)
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package com.melitopolcherry.timester.data.database.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -21,6 +20,6 @@ interface EventsDao {
     @Query("SELECT * FROM events where id = :id")
     suspend fun getEventById(id: Long?): Event
 
-    @Delete
-    fun deleteEvent(event: Event)
+    @Query("DELETE FROM events where id = :id")
+    fun deleteEvent(id: Long?)
 }

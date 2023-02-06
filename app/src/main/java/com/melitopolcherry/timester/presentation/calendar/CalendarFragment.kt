@@ -16,6 +16,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -44,7 +45,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(), ICalendarFragm
     override fun onResume() = with(binding) {
         super.onResume()
         calendarView.removeDecorators()
-        viewModel.loadEvents()
+        viewModel.loadEvents(calendarView.selectedDate)
     }
 
     override fun onClick(v: View?) {
@@ -64,8 +65,12 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(), ICalendarFragm
                     Color.RED,
                     it.map { CalendarDay.from(it.startDate?.toLocalDate()) })
             )
+            if (binding.calendarView.selectedDate != null) {
+                onDaySelected(requireNotNull(binding.calendarView.selectedDate))
+            }
         }
         observe(eventsList) {
+            Timber.d("Event list received ${it.size}")
             eventsAdapter.items = it
         }
     }
