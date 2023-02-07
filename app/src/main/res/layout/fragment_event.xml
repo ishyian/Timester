@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.melitopolcherry.timester.core.presentation.ToolbarView
+        android:id="@+id/toolbar"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        app:isBackButtonVisible="true"
+        app:isCloseButtonVisible="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:toolbarTitle="Event" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/offset16"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintEnd_toEndOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="@id/toolbar"
+        app:srcCompat="@drawable/ic_delete" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/offset16"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintEnd_toStartOf="@id/image_delete"
+        app:layout_constraintTop_toTopOf="@id/toolbar"
+        app:srcCompat="@drawable/ic_check" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/event_nested_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <RelativeLayout
+            android:id="@+id/event_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.simplemobiletools.commons.views.MyEditText
+                android:id="@+id/event_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_margin"
+                android:layout_marginTop="@dimen/activity_margin"
+                android:layout_marginEnd="@dimen/activity_margin"
+                android:hint="@string/title"
+                android:inputType="textCapSentences"
+                android:maxLength="180"
+                android:maxLines="1"
+                android:minEms="20"
+                android:textCursorDrawable="@null"
+                android:textSize="@dimen/text14" />
+
+            <com.simplemobiletools.commons.views.MyEditText
+                android:id="@+id/event_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/event_title"
+                android:layout_marginStart="@dimen/activity_margin"
+                android:layout_marginTop="@dimen/activity_margin"
+                android:layout_marginEnd="@dimen/activity_margin"
+                android:autoLink="all"
+                android:gravity="top"
+                android:hint="@string/description"
+                android:inputType="textCapSentences|textMultiLine"
+                android:linksClickable="true"
+                android:minEms="20"
+                android:textCursorDrawable="@null"
+                android:textSize="@dimen/text14" />
+
+            <ImageView
+                android:id="@+id/event_description_divider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:layout_below="@+id/event_description"
+                android:layout_marginTop="@dimen/activity_margin"
+                android:layout_marginBottom="@dimen/normal_margin"
+                android:background="@color/divider_grey"
+                android:importantForAccessibility="no" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/event_time_image"
+                android:layout_width="@dimen/smaller_icon_size"
+                android:layout_height="@dimen/smaller_icon_size"
+                android:layout_below="@+id/event_description_divider"
+                android:layout_alignTop="@+id/event_all_day_holder"
+                android:layout_alignBottom="@+id/event_all_day_holder"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:padding="@dimen/medium_margin"
+                android:src="@drawable/ic_clock_vector"
+                app:tint="@color/colorTextPrimary" />
+
+            <RelativeLayout
+                android:id="@+id/event_all_day_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/event_description_divider"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/small_margin"
+                android:layout_toEndOf="@+id/event_time_image"
+                android:background="?attr/selectableItemBackground"
+                android:paddingTop="@dimen/medium_margin"
+                android:paddingEnd="@dimen/activity_margin"
+                android:paddingBottom="@dimen/medium_margin">
+
+                <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+                    android:id="@+id/event_all_day"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:layoutDirection="rtl"
+                    android:text="@string/all_day"
+                    android:textSize="@dimen/text14" />
+
+            </RelativeLayout>
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/event_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/event_time_image"
+                android:layout_alignStart="@+id/event_all_day_holder"
+                android:background="?attr/selectableItemBackground"
+                android:paddingTop="@dimen/activity_margin"
+                android:paddingEnd="@dimen/activity_margin"
+                android:paddingBottom="@dimen/activity_margin"
+                android:textSize="@dimen/text14"
+                tools:text="January 1 1970" />
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/event_start_time_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/event_time_image"
+                android:layout_marginEnd="@dimen/medium_margin"
+                android:layout_toStartOf="@id/event_start_time"
+                android:background="?attr/selectableItemBackground"
+                android:padding="@dimen/activity_margin"
+                android:text="@string/start_time"
+                android:textSize="@dimen/text14" />
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/event_start_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/event_time_image"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/medium_margin"
+                android:background="?attr/selectableItemBackground"
+                android:padding="@dimen/activity_margin"
+                android:textSize="@dimen/text14"
+                tools:text="00:00" />
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/event_end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/event_start_time"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/medium_margin"
+                android:background="?attr/selectableItemBackground"
+                android:padding="@dimen/activity_margin"
+                android:textSize="@dimen/text14"
+                tools:text="00:00" />
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/event_end_time_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/event_start_time"
+                android:layout_marginEnd="@dimen/medium_margin"
+                android:layout_toStartOf="@id/event_end_time"
+                android:background="?attr/selectableItemBackground"
+                android:padding="@dimen/activity_margin"
+                android:text="End time:"
+                android:textSize="@dimen/text14" />
+
+            <ImageView
+                android:id="@+id/event_date_time_divider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:layout_below="@+id/event_end_time"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:layout_marginBottom="@dimen/medium_margin"
+                android:background="@color/divider_grey"
+                android:importantForAccessibility="no" />
+
+            <ImageView
+                android:id="@+id/event_type_image"
+                android:layout_width="@dimen/smaller_icon_size"
+                android:layout_height="@dimen/smaller_icon_size"
+                android:layout_below="@+id/event_date_time_divider"
+                android:layout_alignTop="@+id/event_type_holder"
+                android:layout_alignBottom="@+id/event_type_holder"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:padding="@dimen/medium_margin"
+                app:srcCompat="@drawable/ic_event_type" />
+
+            <RelativeLayout
+                android:id="@+id/event_type_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/event_date_time_divider"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:layout_marginBottom="@dimen/medium_margin"
+                android:layout_toEndOf="@+id/event_type_image"
+                android:background="?attr/selectableItemBackground">
+
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/event_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small_margin"
+                    android:layout_marginEnd="@dimen/medium_margin"
+                    android:layout_toStartOf="@+id/event_type_color"
+                    android:paddingTop="@dimen/normal_margin"
+                    android:paddingBottom="@dimen/normal_margin"
+                    android:textSize="@dimen/day_text_size" />
+
+                <ImageView
+                    android:id="@+id/event_type_color"
+                    android:layout_width="@dimen/color_sample_size"
+                    android:layout_height="@dimen/color_sample_size"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/activity_margin"
+                    android:clickable="false" />
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/event_type_divider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:layout_below="@+id/event_type_holder"
+                android:background="@color/divider_grey"
+                android:importantForAccessibility="no" />
+
+            <TextView
+                android:id="@+id/text_attachments_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/event_type_divider"
+                android:layout_marginHorizontal="@dimen/offset16"
+                android:layout_marginVertical="@dimen/offset16"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="@string/attachments"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text18" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_attachments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_attachments_title"
+                android:layout_marginHorizontal="@dimen/offset8"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/add_attachments_item" />
+
+            <TextView
+                android:id="@+id/text_attendess_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rv_attachments"
+                android:layout_marginHorizontal="@dimen/offset16"
+                android:layout_marginVertical="@dimen/offset16"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="@string/attendees"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text18" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_attendees"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_attendess_title"
+                android:layout_marginHorizontal="@dimen/offset8"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/add_attachments_item" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_add_to_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rv_attendees"
+                android:layout_marginHorizontal="@dimen/offset24"
+                android:layout_marginTop="@dimen/offset24"
+                android:layout_marginBottom="@dimen/offset24"
+                android:background="@drawable/bg_add_attachment"
+                android:text="@string/add_to_native_calendar"
+                android:textColor="@color/buttonTextColor" />
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

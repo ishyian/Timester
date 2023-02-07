@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/event_item_holder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/offset16"
+    android:layout_marginEnd="@dimen/offset16"
+    android:layout_marginBottom="@dimen/offset8"
+    android:background="@drawable/section_holder_stroke"
+    android:foreground="@drawable/selector_rounded">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ripple_all_corners"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/event_item_color_bar"
+            android:layout_width="@dimen/offset16"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/small_margin"
+            android:background="@drawable/event_list_color_bar"
+            android:contentDescription="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/event_item_description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/event_item_title" />
+
+        <TextView
+            android:id="@+id/event_item_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/offset8"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:paddingTop="@dimen/small_margin"
+            android:paddingEnd="@dimen/activity_margin"
+            android:paddingBottom="@dimen/tiny_margin"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/text14"
+            app:layout_constraintEnd_toStartOf="@id/event_item_type"
+            app:layout_constraintStart_toEndOf="@+id/event_item_color_bar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Event title" />
+
+        <android.widget.TextView
+            android:id="@+id/event_item_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/event_item_title"
+            android:layout_alignStart="@+id/event_item_title"
+            android:layout_marginStart="@dimen/medium_margin"
+            android:alpha="0.8"
+            android:includeFontPadding="false"
+            android:paddingBottom="@dimen/small_margin"
+            android:textColor="@color/colorTextPrimary"
+            android:textFontWeight="300"
+            android:textSize="@dimen/normal_text_size"
+            app:layout_constraintStart_toEndOf="@+id/event_item_color_bar"
+            app:layout_constraintTop_toBottomOf="@+id/event_item_title"
+            tools:text="13:00" />
+
+        <android.widget.TextView
+            android:id="@+id/event_item_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/event_item_title"
+            android:layout_marginStart="@dimen/medium_margin"
+            android:alpha="0.8"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:paddingEnd="@dimen/activity_margin"
+            android:paddingBottom="@dimen/small_margin"
+            android:textColor="@color/colorTextPrimary"
+            android:textFontWeight="300"
+            android:textSize="@dimen/normal_text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/event_item_color_bar"
+            app:layout_constraintTop_toBottomOf="@+id/event_item_time"
+            tools:text="Event description" />
+
+        <android.widget.TextView
+            android:id="@+id/event_item_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.8"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:paddingEnd="@dimen/activity_margin"
+            android:paddingBottom="@dimen/small_margin"
+            android:textAlignment="center"
+            android:textColor="@color/colorTextPrimary"
+            android:textFontWeight="300"
+            android:paddingTop="@dimen/small_margin"
+            android:textSize="@dimen/text12"
+            app:layout_constraintBottom_toBottomOf="@+id/event_item_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Event description" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
