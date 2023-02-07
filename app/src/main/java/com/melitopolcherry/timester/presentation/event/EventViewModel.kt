@@ -32,6 +32,9 @@ class EventViewModel @AssistedInject constructor(
     private val _event: MutableLiveData<Event> = MutableLiveData()
     val event: LiveData<Event> = _event
 
+    private val _addEventToCalendar: MutableLiveData<Event> = MutableLiveData()
+    val addEventToCalendar: LiveData<Event> = _addEventToCalendar
+
     private val _attachmentsList: MutableLiveData<List<Attachment>> = MutableLiveData()
     val attachmentsList: LiveData<List<Attachment>> = _attachmentsList
 
@@ -101,7 +104,19 @@ class EventViewModel @AssistedInject constructor(
             R.id.image_delete -> {
                 onDeleteClick()
             }
+            R.id.btn_add_to_calendar -> {
+                onAddEventToCalendarClick()
+            }
         }
+    }
+
+    private fun onAddEventToCalendarClick() {
+        val event = Event()
+        event.startDate = startDate
+        event.endDate = endDate
+        event.title = title
+        event.description = description
+        _addEventToCalendar.postValue(event)
     }
 
     override fun onDeleteClick() {

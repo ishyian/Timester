@@ -7,4 +7,5 @@
     <color name="iconColor">@color/white</color>
     <color name="attachment_background">@color/white</color>
     <color name="attachment_text_color">@color/black</color>
+    <color name="buttonTextColor">@color/black</color>
 </resources>

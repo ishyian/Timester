@@ -297,6 +297,18 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="3"
                 tools:listitem="@layout/add_attachments_item" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_add_to_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rv_attendees"
+                android:layout_marginHorizontal="@dimen/offset24"
+                android:layout_marginTop="@dimen/offset24"
+                android:layout_marginBottom="@dimen/offset24"
+                android:background="@drawable/bg_add_attachment"
+                android:text="@string/add_to_native_calendar"
+                android:textColor="@color/buttonTextColor" />
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 

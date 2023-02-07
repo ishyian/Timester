@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/window_background"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/window_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,6 +29,20 @@
             android:textColor="@color/colorTextPrimary"
             android:textFontWeight="800"
             android:textSize="@dimen/text30" />
+
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/offset24"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/team_name"
+        android:textAlignment="center"
+        android:textColor="@color/colorTextPrimary"
+        android:textFontWeight="800"
+        android:layout_marginBottom="@dimen/offset24"
+        android:textSize="@dimen/text16"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

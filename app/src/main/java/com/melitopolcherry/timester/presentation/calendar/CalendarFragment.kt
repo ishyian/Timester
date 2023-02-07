@@ -70,7 +70,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(), ICalendarFragm
         requireContext().showMultiChoiceDialog(
             getString(R.string.select_event_type_to_filter),
             EventFilters.filtersMap
-        ) { dialogInterface: DialogInterface, position: Int, isChecked: Boolean ->
+        ) { _: DialogInterface, position: Int, isChecked: Boolean ->
             EventFilters.filtersMap[EventFilters.filtersMap.keys.elementAt(position)] = isChecked
             viewModel.filterEvents()
         }

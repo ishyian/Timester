@@ -8,6 +8,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ import com.melitopolcherry.timester.core.extensions.toTimeString
 import com.melitopolcherry.timester.core.extensions.viewModelCreator
 import com.melitopolcherry.timester.core.permissions.AndroidPermissionsManager
 import com.melitopolcherry.timester.core.presentation.BaseFragment
+import com.melitopolcherry.timester.data.database.converters.LocalDateTypeConverter
 import com.melitopolcherry.timester.data.database.entity.Event
 import com.melitopolcherry.timester.data.model.Attachment
 import com.melitopolcherry.timester.data.model.Attendee
@@ -108,7 +110,8 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
             eventStartTime,
             eventEndTime,
             toolbar.btnBack,
-            eventTypeHolder
+            eventTypeHolder,
+            btnAddToCalendar
         )
 
         imageDelete.isVisible = parameters.isEditMode
@@ -153,6 +156,19 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
             }
             else -> viewModel.onClick(v)
         }
+    }
+
+    private fun onAddEventToCalendar(event: Event) {
+        val startMillis = LocalDateTypeConverter().dateToTimestamp(event.startDate)
+        val endMillis = LocalDateTypeConverter().dateToTimestamp(event.endDate)
+        val intent = Intent(Intent.ACTION_INSERT)
+            .setData(CalendarContract.Events.CONTENT_URI)
+            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startMillis)
+            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endMillis)
+            .putExtra(CalendarContract.Events.TITLE, event.title)
+            .putExtra(CalendarContract.Events.DESCRIPTION, event.description)
+            .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
+        startActivity(intent)
     }
 
     private fun onEventTypeClick() {
@@ -210,6 +226,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         eventStartTime.isInvisible = event.isAllDay
         eventAllDay.isChecked = event.isAllDay
         eventType.text = EventType.typeOf(event.eventType).typeName
+        btnAddToCalendar.isVisible = parameters.isEditMode
     }
 
     private fun onStartDateChanged(startDate: LocalDateTime) = with(binding) {
@@ -294,5 +311,6 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         observe(showMsgError, ::showErrorMessage)
         observe(attachmentsList, ::onAttachmentsLoad)
         observe(attendeesList, ::onAttendeesLoad)
+        observe(addEventToCalendar, ::onAddEventToCalendar)
     }
 }

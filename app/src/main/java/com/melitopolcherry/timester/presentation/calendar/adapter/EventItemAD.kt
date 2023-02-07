@@ -3,6 +3,7 @@ package com.melitopolcherry.timester.presentation.calendar.adapter
 import android.annotation.SuppressLint
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import com.melitopolcherry.timester.R
+import com.melitopolcherry.timester.data.model.EventType
 import com.melitopolcherry.timester.databinding.EventItemBinding
 import com.melitopolcherry.timester.presentation.calendar.model.EventUiModel
 
@@ -26,7 +27,7 @@ fun eventItemAD(
             } else {
                 "Start time: ${item.event.eventStartTime}"
             }
-
+            eventItemType.text = EventType.typeOf(item.event.eventType).typeName
         }
     }
 }

@@ -45,7 +45,7 @@
             android:paddingBottom="@dimen/tiny_margin"
             android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/text14"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/event_item_type"
             app:layout_constraintStart_toEndOf="@+id/event_item_color_bar"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Event title" />
@@ -85,6 +85,26 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/event_item_color_bar"
             app:layout_constraintTop_toBottomOf="@+id/event_item_time"
+            tools:text="Event description" />
+
+        <android.widget.TextView
+            android:id="@+id/event_item_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.8"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:paddingEnd="@dimen/activity_margin"
+            android:paddingBottom="@dimen/small_margin"
+            android:textAlignment="center"
+            android:textColor="@color/colorTextPrimary"
+            android:textFontWeight="300"
+            android:paddingTop="@dimen/small_margin"
+            android:textSize="@dimen/text12"
+            app:layout_constraintBottom_toBottomOf="@+id/event_item_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Event description" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

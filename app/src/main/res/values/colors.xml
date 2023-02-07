@@ -15,4 +15,5 @@
     <color name="calendarPrimaryColor">@color/colorTextPrimary</color>
     <color name="iconColor">@color/black</color>
     <color name="calendarSelectionColor">@color/purple_200</color>
+    <color name="buttonTextColor">@color/white</color>
 </resources>
