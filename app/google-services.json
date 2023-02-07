@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "43010069590",
+    "project_id": "timester-5daea",
+    "storage_bucket": "timester-5daea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43010069590:android:c8cadf3084627d930217f7",
+        "android_client_info": {
+          "package_name": "com.melitopolcherry.timester"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "43010069590-tefi5ru8k5qr7rp1d8gce2862uhq804s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMHge5-JOn2W9ofs1Hxp8LxY7y4ER9wMI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "43010069590-tefi5ru8k5qr7rp1d8gce2862uhq804s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

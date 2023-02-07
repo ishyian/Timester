@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -27,7 +28,7 @@ android {
         }
         android.applicationVariants.all { variant ->
             variant.outputs.all {
-                outputFileName = "topii_${variant.name}-${variant.versionName}-(${variant.versionCode}).apk"
+                outputFileName = "timester_${variant.name}-${variant.versionName}-(${variant.versionCode}).apk"
             }
         }
     }
@@ -67,7 +68,6 @@ dependencies {
         androidTestImplementation item
     }
 
-    implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
-    implementation 'com.github.SimpleMobileTools:Simple-Commons:58574dd952'
-    implementation 'io.github.farhad:contactpicker:2.0.0'
+    implementation platform('com.google.firebase:firebase-bom:31.2.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }

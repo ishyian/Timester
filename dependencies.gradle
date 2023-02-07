@@ -34,6 +34,9 @@ ext {
     roomVersion = '2.4.3'
     calendarViewVersion = "1.6.1"
     threeTenBpVersion = '1.4.4'
+    contactPickerVersion = '2.0.0'
+    simpleCommonsVersion = '58574dd952'
+    calendarViewVersion = '2.0.1'
 
     coreKtx = "androidx.core:core-ktx:$coreKtxVersion"
     appCompat = "androidx.appcompat:appcompat:$appCompatVersion"
@@ -80,6 +83,10 @@ ext {
     glide = "com.github.bumptech.glide:glide:$glideVersion"
     glideCompiler = "com.github.bumptech.glide:compiler:$glideVersion"
 
+    calendarView = "com.github.prolificinteractive:material-calendarview:$calendarViewVersion"
+    simpleCommons = "com.github.SimpleMobileTools:Simple-Commons:$simpleCommonsVersion"
+    contactPicker = "io.github.farhad:contactpicker:$contactPickerVersion"
+
     junit = "junit:junit:$junitVersion"
     mockito = "org.mockito.kotlin:mockito-kotlin:$mockitoVersion"
     coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTestVersion"
@@ -117,7 +124,10 @@ ext {
                     javaTime,
                     glide,
                     room,
-                    roomKtx
+                    roomKtx,
+                    calendarView,
+                    simpleCommons,
+                    contactPicker
             ],
 
             forKapt          : [
