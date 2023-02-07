@@ -1,9 +1,10 @@
-package com.melitopolcherry.timester.data.model
+package com.melitopolcherry.timester.data.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.melitopolcherry.timester.data.model.EventType
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -36,6 +37,9 @@ class Event {
     @ColumnInfo(name = "attachments")
     var attachments: String = ""
 
+    @ColumnInfo(name = "attendees")
+    var attendess: String = ""
+
     val eventStartTime: String?
         get() = startDate?.format(DateTimeFormatter.ofPattern("HH:mm"))
 
@@ -44,6 +48,9 @@ class Event {
 
     val eventStartDate: String?
         get() = startDate?.format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
+
+    val textInvite: String
+        get() = "I invite you to $title on $eventStartDate at $eventStartTime. Please RSVP my invite via reply."
 
     @Ignore
     constructor()

@@ -1,4 +1,4 @@
-package com.melitopolcherry.timester.presentation.event.adapter
+package com.melitopolcherry.timester.presentation.event.adapter.delegates
 
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide

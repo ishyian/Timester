@@ -1,6 +1,6 @@
 package com.melitopolcherry.timester.domain.repo
 
-import com.melitopolcherry.timester.data.model.Event
+import com.melitopolcherry.timester.data.database.entity.Event
 
 interface EventsRepository {
     suspend fun getEvents(): List<Event>

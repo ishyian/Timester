@@ -1,4 +1,4 @@
-package com.melitopolcherry.timester.presentation.event.adapter
+package com.melitopolcherry.timester.presentation.event.adapter.delegates
 
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import com.melitopolcherry.timester.databinding.AddAttachmentsItemBinding

@@ -2,7 +2,7 @@ package com.melitopolcherry.timester.data.repo
 
 import com.melitopolcherry.timester.core.coroutines.AppDispatchers
 import com.melitopolcherry.timester.data.database.AppDatabase
-import com.melitopolcherry.timester.data.model.Event
+import com.melitopolcherry.timester.data.database.entity.Event
 import com.melitopolcherry.timester.domain.repo.EventsRepository
 import kotlinx.coroutines.withContext
 

@@ -144,6 +144,18 @@
                 tools:text="January 1 1970" />
 
             <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/event_start_time_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/event_time_image"
+                android:layout_marginEnd="@dimen/medium_margin"
+                android:layout_toStartOf="@id/event_start_time"
+                android:background="?attr/selectableItemBackground"
+                android:padding="@dimen/activity_margin"
+                android:text="@string/start_time"
+                android:textSize="@dimen/text14" />
+
+            <com.simplemobiletools.commons.views.MyTextView
                 android:id="@+id/event_start_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -166,6 +178,18 @@
                 android:padding="@dimen/activity_margin"
                 android:textSize="@dimen/text14"
                 tools:text="00:00" />
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/event_end_time_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/event_start_time"
+                android:layout_marginEnd="@dimen/medium_margin"
+                android:layout_toStartOf="@id/event_end_time"
+                android:background="?attr/selectableItemBackground"
+                android:padding="@dimen/activity_margin"
+                android:text="End time:"
+                android:textSize="@dimen/text14" />
 
             <ImageView
                 android:id="@+id/event_date_time_divider"
@@ -245,6 +269,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_attachments_title"
+                android:layout_marginHorizontal="@dimen/offset8"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/add_attachments_item" />
+
+            <TextView
+                android:id="@+id/text_attendess_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rv_attachments"
+                android:layout_marginHorizontal="@dimen/offset16"
+                android:layout_marginVertical="@dimen/offset16"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="@string/attendees"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text18" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_attendees"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_attendess_title"
                 android:layout_marginHorizontal="@dimen/offset8"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

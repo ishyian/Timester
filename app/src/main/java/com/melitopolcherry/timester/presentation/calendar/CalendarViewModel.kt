@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.melitopolcherry.timester.R
 import com.melitopolcherry.timester.core.extensions.isSameDay
-import com.melitopolcherry.timester.data.model.Event
+import com.melitopolcherry.timester.data.database.entity.Event
 import com.melitopolcherry.timester.data.model.EventType
 import com.melitopolcherry.timester.domain.repo.EventsRepository
 import com.melitopolcherry.timester.presentation.Screens

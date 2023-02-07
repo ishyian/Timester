@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.melitopolcherry.timester.data.model.Event
+import com.melitopolcherry.timester.data.database.entity.Event
 
 @Dao
 interface EventsDao {

@@ -7,12 +7,12 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.melitopolcherry.timester.data.database.converters.LocalDateTypeConverter
 import com.melitopolcherry.timester.data.database.dao.EventsDao
-import com.melitopolcherry.timester.data.model.Event
+import com.melitopolcherry.timester.data.database.entity.Event
 
 @TypeConverters(
     LocalDateTypeConverter::class
 )
-@Database(entities = [Event::class], version = 7, exportSchema = false)
+@Database(entities = [Event::class], version = 8, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun eventsDao(): EventsDao

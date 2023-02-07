@@ -8,13 +8,15 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.melitopolcherry.timester.R
+import com.melitopolcherry.timester.data.database.entity.Event
 import com.melitopolcherry.timester.data.model.Attachment
-import com.melitopolcherry.timester.data.model.Event
+import com.melitopolcherry.timester.data.model.Attendee
 import com.melitopolcherry.timester.data.model.EventType
 import com.melitopolcherry.timester.domain.repo.EventsRepository
 import com.topiichat.core.presentation.platform.BaseViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import io.github.farhad.contactpicker.PickedContact
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
 import ru.terrakok.cicerone.Router
@@ -32,6 +34,9 @@ class EventViewModel @AssistedInject constructor(
     private val _attachmentsList: MutableLiveData<List<Attachment>> = MutableLiveData()
     val attachmentsList: LiveData<List<Attachment>> = _attachmentsList
 
+    private val _attendeesList: MutableLiveData<List<Attendee>> = MutableLiveData()
+    val attendeesList: LiveData<List<Attendee>> = _attendeesList
+
     private val _eventStartDate: MutableLiveData<LocalDateTime> = MutableLiveData()
     val eventStartDate: LiveData<LocalDateTime> = _eventStartDate
 
@@ -48,6 +53,7 @@ class EventViewModel @AssistedInject constructor(
     private var newEvent = Event()
 
     private var attachments = arrayListOf<Attachment>()
+    private var attendees = arrayListOf<Attendee>()
 
     init {
         Timber.d(parameters.isEditMode.toString())
@@ -60,20 +66,21 @@ class EventViewModel @AssistedInject constructor(
                 eventType = event.eventType
                 title = event.title
                 val token = object : TypeToken<ArrayList<Attachment>>() {}.type
+                val tokenAttendee = object : TypeToken<ArrayList<Attendee>>() {}.type
                 Timber.d(event.attachments)
                 attachments = Gson().fromJson<ArrayList<Attachment>>(event.attachments, token) ?: ArrayList()
+                attendees = Gson().fromJson<ArrayList<Attendee>>(event.attendess, tokenAttendee) ?: ArrayList()
                 _event.postValue(event)
-                Timber.d(attachments.toString())
                 _attachmentsList.postValue(attachments)
+                _attendeesList.postValue(attendees)
             }
         } else {
             newEvent.startDate = startDate
             newEvent.endDate = endDate
 
             _event.postValue(newEvent)
-            val token = object : TypeToken<ArrayList<Attachment>>() {}.type
             _attachmentsList.postValue(attachments)
-            Timber.d(attachmentsList.value?.toString())
+            _attendeesList.postValue(attendees)
         }
     }
 
@@ -108,6 +115,7 @@ class EventViewModel @AssistedInject constructor(
             newEvent.eventType = eventType
             newEvent.isAllDay = isAllDay
             newEvent.attachments = Gson().toJson(attachments)
+            newEvent.attendess = Gson().toJson(attendees)
             viewModelScope.launch {
                 eventsRepository.createEvent(newEvent)
                 onClickBack()
@@ -124,6 +132,7 @@ class EventViewModel @AssistedInject constructor(
             newEvent.eventType = eventType
             newEvent.isAllDay = isAllDay
             newEvent.attachments = Gson().toJson(attachments)
+            newEvent.attendess = Gson().toJson(attendees)
             viewModelScope.launch {
                 val id = eventsRepository.createEvent(newEvent)
                 Timber.d("Event id $id")
@@ -204,6 +213,18 @@ class EventViewModel @AssistedInject constructor(
 
     fun addAttachment(uri: Uri?) {
         attachments.add(Attachment(uri.toString()))
+    }
+
+    fun addAttendee(attendee: PickedContact) {
+        attendees.add(Attendee(attendee.name.toString(), attendee.number))
+    }
+
+    fun getInviteText(): String {
+        val event = Event()
+        event.title = title
+        event.startDate = startDate
+        event.endDate = endDate
+        return event.textInvite
     }
 
     @dagger.assisted.AssistedFactory

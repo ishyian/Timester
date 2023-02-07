@@ -2,19 +2,19 @@ package com.melitopolcherry.timester.presentation.event.adapter
 
 import com.hannesdorfmann.adapterdelegates4.AsyncListDifferDelegationAdapter
 import com.melitopolcherry.timester.core.adapter.BaseDiffCallback
-import com.melitopolcherry.timester.data.model.Attachment
-import com.melitopolcherry.timester.presentation.event.adapter.delegates.addAttachmentAD
-import com.melitopolcherry.timester.presentation.event.adapter.delegates.attachmentAD
+import com.melitopolcherry.timester.data.model.Attendee
+import com.melitopolcherry.timester.presentation.event.adapter.delegates.addAttendeeAD
+import com.melitopolcherry.timester.presentation.event.adapter.delegates.attendeeAD
 
-class AttachmentsAdapter(
+class AttendeesAdapter(
     onAddClick: () -> Unit,
-    onAttachmentsClick: (Attachment) -> Unit
+    onAttendeeClick: (Attendee) -> Unit
 ) : AsyncListDifferDelegationAdapter<Any>(DiffCallback) {
 
     init {
         delegatesManager
-            .addDelegate(addAttachmentAD(onAddClick))
-            .addDelegate(attachmentAD(onAttachmentsClick))
+            .addDelegate(addAttendeeAD(onAddClick))
+            .addDelegate(attendeeAD(onAttendeeClick))
     }
 
     private companion object DiffCallback : BaseDiffCallback() {

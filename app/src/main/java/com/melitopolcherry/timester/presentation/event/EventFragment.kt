@@ -6,6 +6,7 @@ import android.app.TimePickerDialog
 import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.core.net.toUri
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
+import com.melitopolcherry.timester.MainActivity
 import com.melitopolcherry.timester.R
 import com.melitopolcherry.timester.core.contract.PickFileActivityContract
 import com.melitopolcherry.timester.core.delegates.parcelableParameters
@@ -24,14 +26,20 @@ import com.melitopolcherry.timester.core.extensions.toTimeString
 import com.melitopolcherry.timester.core.extensions.viewModelCreator
 import com.melitopolcherry.timester.core.permissions.AndroidPermissionsManager
 import com.melitopolcherry.timester.core.presentation.BaseFragment
+import com.melitopolcherry.timester.data.database.entity.Event
 import com.melitopolcherry.timester.data.model.Attachment
-import com.melitopolcherry.timester.data.model.Event
+import com.melitopolcherry.timester.data.model.Attendee
 import com.melitopolcherry.timester.data.model.EventType
 import com.melitopolcherry.timester.databinding.FragmentEventBinding
 import com.melitopolcherry.timester.presentation.event.adapter.AttachmentsAdapter
+import com.melitopolcherry.timester.presentation.event.adapter.AttendeesAdapter
 import com.melitopolcherry.timester.presentation.event.model.AddAttachmentUiModel
+import com.melitopolcherry.timester.presentation.event.model.AddAttendeeUiModel
 import com.melitopolcherry.timester.presentation.event.model.AttachmentUiModel
+import com.melitopolcherry.timester.presentation.event.model.AttendeeUiModel
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.farhad.contactpicker.ContactPicker
+import io.github.farhad.contactpicker.PickedContact
 import org.threeten.bp.LocalDateTime
 import java.util.Calendar
 import javax.inject.Inject
@@ -52,6 +60,13 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         AttachmentsAdapter(
             onAddClick = ::onAddClick,
             onAttachmentsClick = ::onAttachmentClick
+        )
+    }
+
+    private val attendeeAdapter by lazyUnsynchronized {
+        AttendeesAdapter(
+            onAddClick = ::onAddAttendeeClick,
+            onAttendeeClick = ::onAttendeeClick
         )
     }
 
@@ -106,13 +121,16 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
             viewModel.onTitleChanged(text.toString())
         }
 
-        eventAllDay.setOnCheckedChangeListener { buttonView, isChecked ->
+        eventAllDay.setOnCheckedChangeListener { _, isChecked ->
             eventEndTime.isInvisible = isChecked
             eventStartTime.isInvisible = isChecked
+            eventStartTimeTitle.isInvisible = isChecked
+            eventEndTimeTitle.isInvisible = isChecked
             viewModel.onAllDayChanged(isChecked)
         }
 
         rvAttachments.adapter = attachmentsAdapter
+        rvAttendees.adapter = attendeeAdapter
 
         initObservers()
     }
@@ -212,6 +230,25 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         )
     }
 
+    private fun onAddAttendeeClick() {
+        val picker: ContactPicker? = ContactPicker.create(
+            activity = requireActivity() as MainActivity,
+            onContactPicked = { attendee ->
+                attendeeAdapter.items = attendeeAdapter
+                    .items
+                    .plus(AttendeeUiModel(Attendee(attendee.name.toString(), attendee.number)))
+                viewModel.addAttendee(attendee)
+                sendInvite(attendee)
+            },
+            onFailure = { error ->
+                showErrorMessage(
+                    error.localizedMessage?.toString() ?: getString(R.string.contact_picker_error)
+                )
+            })
+
+        picker?.pick()
+    }
+
     private fun onAttachmentClick(attachment: Attachment) {
         val view = Intent(Intent.ACTION_VIEW)
         view.data = attachment.uri.toUri()
@@ -225,8 +262,29 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         }
     }
 
+    private fun onAttendeeClick(attendee: Attendee) {
+        sendInvite(PickedContact(attendee.phoneNumber, attendee.displayName))
+    }
+
     private fun onAttachmentsLoad(list: List<Attachment>) {
         attachmentsAdapter.items = listOf(AddAttachmentUiModel).plus(list.map { AttachmentUiModel(it) })
+    }
+
+    private fun onAttendeesLoad(list: List<Attendee>) {
+        attendeeAdapter.items = listOf(AddAttendeeUiModel).plus(list.map { AttendeeUiModel(it) })
+    }
+
+    private fun sendInvite(attendee: PickedContact) {
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse("smsto:${attendee.number}") // This ensures only SMS apps respond
+        intent.putExtra("sms_body", viewModel.getInviteText())
+        if (intent.resolveActivity(requireContext().packageManager) != null) {
+            try {
+                startActivity(intent)
+            } catch (anfe: ActivityNotFoundException) {
+                //Ignore
+            }
+        }
     }
 
     private fun initObservers() = with(viewModel) {
@@ -235,5 +293,6 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         observe(eventStartDate, ::onStartDateChanged)
         observe(showMsgError, ::showErrorMessage)
         observe(attachmentsList, ::onAttachmentsLoad)
+        observe(attendeesList, ::onAttendeesLoad)
     }
 }
