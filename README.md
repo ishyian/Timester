@@ -15,6 +15,8 @@
 
 ## Як працює
 
+https://user-images.githubusercontent.com/34608335/217240904-17d58b71-435f-4f0d-85c3-b8ef81b69913.mp4
+
 ## Технологічний стек
 
 * Kotlin
