@@ -47,7 +47,7 @@ class CalendarViewModel @Inject constructor(
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.btn_add_event -> {
-                navigate(Screens.Event(EventParameters()))
+                navigate(Screens.Event(EventParameters(selectedDate = selectedDate)))
             }
         }
     }

@@ -5,7 +5,6 @@ import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import com.melitopolcherry.timester.R
 import com.melitopolcherry.timester.databinding.EventItemBinding
 import com.melitopolcherry.timester.presentation.calendar.model.EventUiModel
-import org.threeten.bp.format.DateTimeFormatter
 
 @SuppressLint("SetTextI18n")
 fun eventItemAD(
@@ -25,7 +24,7 @@ fun eventItemAD(
             eventItemTime.text = if (item.event.isAllDay) {
                 getString(R.string.all_day)
             } else {
-                item.event.startDate?.format(DateTimeFormatter.ofPattern("HH:mm"))
+                "Start time: ${item.event.eventStartTime}"
             }
 
         }

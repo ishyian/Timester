@@ -19,6 +19,7 @@ import dagger.assisted.AssistedInject
 import io.github.farhad.contactpicker.PickedContact
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.LocalTime
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
@@ -43,7 +44,11 @@ class EventViewModel @AssistedInject constructor(
     private val _eventEndDate: MutableLiveData<LocalDateTime> = MutableLiveData()
     val eventEndDate: LiveData<LocalDateTime> = _eventEndDate
 
-    private var startDate: LocalDateTime = LocalDateTime.now()
+    private var startDate: LocalDateTime = if (parameters.selectedDate != null) {
+        LocalDateTime.of(parameters.selectedDate, LocalTime.now())
+    } else {
+        LocalDateTime.now()
+    }
     private var endDate: LocalDateTime = startDate.plusHours(1)
     private var title: String = ""
     private var description: String = ""
