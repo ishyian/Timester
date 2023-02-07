@@ -10,7 +10,7 @@
 
 ## Встановлення додатку
 
-Завантажте apk файл з посилання Firebase App Distribution та встановіть на телефон з Android OS.
+Завантажте apk файл з [посилання](https://appdistribution.firebase.dev/i/ce300a8a91d1fbf3) Firebase App Distribution та встановіть на телефон з Android OS.
 Мінімальна версія OS - 23.
 
 ## Як працює
