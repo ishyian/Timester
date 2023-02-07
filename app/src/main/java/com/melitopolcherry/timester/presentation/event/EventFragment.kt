@@ -158,7 +158,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         }
     }
 
-    private fun onAddEventToCalendar(event: Event) {
+    override fun onAddEventToCalendar(event: Event) {
         val startMillis = LocalDateTypeConverter().dateToTimestamp(event.startDate)
         val endMillis = LocalDateTypeConverter().dateToTimestamp(event.endDate)
         val intent = Intent(Intent.ACTION_INSERT)
@@ -171,7 +171,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         startActivity(intent)
     }
 
-    private fun onEventTypeClick() {
+    override fun onEventTypeClick() {
         showSelectorDialog(getString(R.string.select_event_type_title),
                            EventType.values().map { it.typeName }) { dialogInterface: DialogInterface, i: Int ->
             val eventType = EventType.values()[i]
@@ -181,7 +181,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         }
     }
 
-    private fun onStartDateClicked() {
+    override fun onStartDateClicked() {
         val datePicker = DatePickerDialog(
             requireContext(),
             startDateSetListener,
@@ -194,7 +194,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         datePicker.show()
     }
 
-    private fun onStartTimeClicked() {
+    override fun onStartTimeClicked() {
         val timePicker = TimePickerDialog(
             requireContext(),
             startTimeSetListener,
@@ -216,7 +216,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         timePicker.show()
     }
 
-    private fun onEventLoaded(event: Event) = with(binding) {
+    override fun onEventLoaded(event: Event) = with(binding) {
         eventTitle.setText(event.title)
         eventDescription.setText(event.description)
         eventStartTime.text = event.eventStartTime
@@ -229,16 +229,16 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         btnAddToCalendar.isVisible = parameters.isEditMode
     }
 
-    private fun onStartDateChanged(startDate: LocalDateTime) = with(binding) {
+    override fun onStartDateChanged(startDate: LocalDateTime) = with(binding) {
         eventStartTime.text = startDate.toTimeString()
         eventStartDate.text = startDate.toDateString()
     }
 
-    private fun onEndDateChanged(endDate: LocalDateTime) = with(binding) {
+    override fun onEndDateChanged(endDate: LocalDateTime) = with(binding) {
         eventEndTime.text = endDate.toTimeString()
     }
 
-    private fun onAddClick() {
+    override fun onAddClick() {
         permissionManager?.requestPermissions(
             permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
             granted = { pickFile.launch(Unit) },
@@ -247,7 +247,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         )
     }
 
-    private fun onAddAttendeeClick() {
+    override fun onAddAttendeeClick() {
         val picker: ContactPicker? = ContactPicker.create(
             activity = requireActivity() as MainActivity,
             onContactPicked = { attendee ->
@@ -266,7 +266,7 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         picker?.pick()
     }
 
-    private fun onAttachmentClick(attachment: Attachment) {
+    override fun onAttachmentClick(attachment: Attachment) {
         val view = Intent(Intent.ACTION_VIEW)
         view.data = attachment.uri.toUri()
         view.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -279,19 +279,19 @@ class EventFragment : BaseFragment<FragmentEventBinding>(), IEventFragment, View
         }
     }
 
-    private fun onAttendeeClick(attendee: Attendee) {
+    override fun onAttendeeClick(attendee: Attendee) {
         sendInvite(PickedContact(attendee.phoneNumber, attendee.displayName))
     }
 
-    private fun onAttachmentsLoad(list: List<Attachment>) {
+    override fun onAttachmentsLoad(list: List<Attachment>) {
         attachmentsAdapter.items = listOf(AddAttachmentUiModel).plus(list.map { AttachmentUiModel(it) })
     }
 
-    private fun onAttendeesLoad(list: List<Attendee>) {
+    override fun onAttendeesLoad(list: List<Attendee>) {
         attendeeAdapter.items = listOf(AddAttendeeUiModel).plus(list.map { AttendeeUiModel(it) })
     }
 
-    private fun sendInvite(attendee: PickedContact) {
+    override fun sendInvite(attendee: PickedContact) {
         val intent = Intent(Intent.ACTION_SENDTO)
         intent.data = Uri.parse("smsto:${attendee.number}") // This ensures only SMS apps respond
         intent.putExtra("sms_body", viewModel.getInviteText())
