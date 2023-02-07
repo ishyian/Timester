@@ -4,6 +4,7 @@ import com.melitopolcherry.timester.core.delegates.parcelableParametersBundleOf
 import com.melitopolcherry.timester.presentation.calendar.CalendarFragment
 import com.melitopolcherry.timester.presentation.event.EventFragment
 import com.melitopolcherry.timester.presentation.event.EventParameters
+import com.melitopolcherry.timester.presentation.splash.SplashFragment
 import ru.terrakok.cicerone.android.support.FragmentParams
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
@@ -20,5 +21,9 @@ object Screens {
             EventFragment::class.java,
             parcelableParametersBundleOf(parameters)
         )
+    }
+
+    object Splash : SupportAppScreen() {
+        override fun getFragment() = SplashFragment()
     }
 }

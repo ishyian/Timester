@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
-            router.newRootScreen(Screens.Calendar)
+            router.newRootScreen(Screens.Splash)
         }
     }
 

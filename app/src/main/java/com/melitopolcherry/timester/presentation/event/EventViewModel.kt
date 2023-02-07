@@ -60,8 +60,10 @@ class EventViewModel @AssistedInject constructor(
     private var attachments = arrayListOf<Attachment>()
     private var attendees = arrayListOf<Attendee>()
 
+    private val tokenAttachment = object : TypeToken<ArrayList<Attachment>>() {}.type
+    private val tokenAttendee = object : TypeToken<ArrayList<Attendee>>() {}.type
+
     init {
-        Timber.d(parameters.isEditMode.toString())
         if (parameters.isEditMode) {
             viewModelScope.launch {
                 val event = eventsRepository.getEventById(parameters.eventId)
@@ -70,10 +72,9 @@ class EventViewModel @AssistedInject constructor(
                 description = event.description
                 eventType = event.eventType
                 title = event.title
-                val token = object : TypeToken<ArrayList<Attachment>>() {}.type
-                val tokenAttendee = object : TypeToken<ArrayList<Attendee>>() {}.type
+
                 Timber.d(event.attachments)
-                attachments = Gson().fromJson<ArrayList<Attachment>>(event.attachments, token) ?: ArrayList()
+                attachments = Gson().fromJson<ArrayList<Attachment>>(event.attachments, tokenAttachment) ?: ArrayList()
                 attendees = Gson().fromJson<ArrayList<Attendee>>(event.attendess, tokenAttendee) ?: ArrayList()
                 _event.postValue(event)
                 _attachmentsList.postValue(attachments)
@@ -103,14 +104,14 @@ class EventViewModel @AssistedInject constructor(
         }
     }
 
-    private fun onDeleteClick() {
+    override fun onDeleteClick() {
         viewModelScope.launch {
             eventsRepository.deleteEvent(event.value?.id)
             onClickBack()
         }
     }
 
-    private fun onBtnSaveClick() {
+    override fun onBtnSaveClick() {
         if (parameters.isEditMode) {
             newEvent.id = event.value?.id ?: 0
             newEvent.startDate = startDate
@@ -139,22 +140,20 @@ class EventViewModel @AssistedInject constructor(
             newEvent.attachments = Gson().toJson(attachments)
             newEvent.attendess = Gson().toJson(attendees)
             viewModelScope.launch {
-                val id = eventsRepository.createEvent(newEvent)
-                Timber.d("Event id $id")
+                eventsRepository.createEvent(newEvent)
                 onClickBack()
             }
         }
     }
 
-    fun onStartDateChanged(year: Int, month: Int, dayOfMonth: Int) {
+    override fun onStartDateChanged(year: Int, month: Int, dayOfMonth: Int) {
         startDate = LocalDateTime.of(year, month + 1, dayOfMonth, startDate.hour, startDate.minute)
         endDate = LocalDateTime.of(year, month + 1, dayOfMonth, endDate.hour, endDate.minute)
-
         _eventStartDate.postValue(startDate)
 
     }
 
-    fun onStartTimeChanged(hourOfDay: Int, minute: Int) {
+    override fun onStartTimeChanged(hourOfDay: Int, minute: Int) {
         startDate = LocalDateTime.of(
             startDate.year,
             startDate.month,
@@ -166,7 +165,7 @@ class EventViewModel @AssistedInject constructor(
         _eventStartDate.postValue(startDate)
     }
 
-    fun onEndTimeChanged(hourOfDay: Int, minute: Int) {
+    override fun onEndTimeChanged(hourOfDay: Int, minute: Int) {
         endDate = LocalDateTime.of(
             endDate.year,
             endDate.month,
@@ -178,19 +177,19 @@ class EventViewModel @AssistedInject constructor(
         _eventEndDate.postValue(endDate)
     }
 
-    fun onDescriptionChanged(description: String) {
+    override fun onDescriptionChanged(description: String) {
         this.description = description
     }
 
-    fun onTitleChanged(title: String) {
+    override fun onTitleChanged(title: String) {
         this.title = title
     }
 
-    fun onEventTypeChanged(eventType: String) {
+    override fun onEventTypeChanged(eventType: String) {
         this.eventType = eventType
     }
 
-    fun onAllDayChanged(isAllDay: Boolean) {
+    override fun onAllDayChanged(isAllDay: Boolean) {
         this.isAllDay = isAllDay
         if (isAllDay) {
             startDate = LocalDateTime.of(
@@ -216,15 +215,15 @@ class EventViewModel @AssistedInject constructor(
         }
     }
 
-    fun addAttachment(uri: Uri?) {
+    override fun addAttachment(uri: Uri?) {
         attachments.add(Attachment(uri.toString()))
     }
 
-    fun addAttendee(attendee: PickedContact) {
+    override fun addAttendee(attendee: PickedContact) {
         attendees.add(Attendee(attendee.name.toString(), attendee.number))
     }
 
-    fun getInviteText(): String {
+    override fun getInviteText(): String {
         val event = Event()
         event.title = title
         event.startDate = startDate
