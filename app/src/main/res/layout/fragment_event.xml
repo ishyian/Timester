@@ -228,11 +228,24 @@
                 android:background="@color/divider_grey"
                 android:importantForAccessibility="no" />
 
+            <TextView
+                android:id="@+id/text_attachments_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/event_type_divider"
+                android:layout_marginHorizontal="@dimen/offset16"
+                android:layout_marginVertical="@dimen/offset16"
+                android:fontFamily="@font/open_sans_semibold"
+                android:text="@string/attachments"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text18" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_attachments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/event_type_divider"
+                android:layout_below="@id/text_attachments_title"
+                android:layout_marginHorizontal="@dimen/offset8"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="3"

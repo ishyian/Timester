@@ -10,4 +10,6 @@
     <string name="file_permission_denied">To add attachment you need to grant permission.</string>
     <string name="no_application_found_to_open_file">No apps to open this file</string>
     <string name="sharing_application_not_grant_permission">Permissions to view not granted</string>
+    <string name="events">Events</string>
+    <string name="attachments">Attachments</string>
 </resources>
